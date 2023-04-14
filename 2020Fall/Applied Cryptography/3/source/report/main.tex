@@ -1,0 +1,381 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{ctex}
+\usepackage{assignpkg}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\studentIds{202XX80XXXXXXXX}{}
+\studentNames{XXX}{}
+
+\usepackage{listings}
+\usepackage{color}
+\usepackage{mathrsfs}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+  language=Octave,                % the language of the code
+  basicstyle=\footnotesize,           % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=2,                   % the step between two line-numbers. If it's 1, each line 
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},      % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                   % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{mauve},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add LaTeX within your code
+  morekeywords={*,...}               % if you want to add more keywords to the set
+}
+
+
+\usepackage{tikz}
+\usetikzlibrary{fpu}
+\assignmentNumber{3}{}
+\date{\today}
+\usepackage{ifthen}
+\begin{document}
+
+\makecover
+
+\section*{线性移位寄存器}
+特征多项式$f(x)=1+x+x^3+x^4$对应的线性移位寄存器图如下：
+\begin{figure}[htbp]
+\centering
+\tikzstyle{register}=[draw, thick, minimum width=1.5cm, minimum height=1cm, 
+                                    draw=magenta!100,
+                                    fill=pink!20
+                                    ]
+\tikzstyle{XOR}=[circle,thick,minimum size=1cm,
+                                    draw=magenta!80,
+                                    fill=pink!20]
+	\begin{tikzpicture}[thick]
+	\path
+		node (register4) [register] at (0,0) {第4级}
+		node (XOR4) [XOR] at (0,-3) {}
+		[xshift=3cm]
+		node (register3) [register] at (0,0) {第3级}
+		%[yshift=3cm]
+		node (XOR3) [XOR] at (0,-3) {}
+		[xshift=3cm]
+		node (register2) [register] at (0,0) {第2级}
+		[xshift=3cm]
+		node (register1) [register] at (0,0) {第1级}
+		node (XOR1) [XOR] at (0,-3) {}
+		;
+	\begin{scope}
+		\draw[-latex] (register1.west)	-- (register2.east);
+		\draw[-latex] (register2.west)	-- (register3.east);
+		\draw[-latex] (register3.west)	-- (register4.east);
+		\draw[-latex] (register4.west) -- ([xshift=-2cm]register4.west);
+		%\draw[-latex] (register4.south) -- ([yshift=-2.5cm]register4.south) -- (XOR3.west); 
+		\draw[-latex] (register4.south) -- (XOR4.north);
+		\draw[-latex] (XOR4.east) -- (XOR3.west);
+		\draw[-latex] (XOR3.east) -- (XOR1.west);
+		\draw[-latex] (XOR1.east) -- ([xshift=1cm]XOR1.east)--([xshift=0.75cm]register1.east)--(register1.east);
+		\draw[-latex] (register3.south)-- (XOR3.north);
+		\draw[-, magenta] (XOR3.north) -- (XOR3.south);
+		\draw[-, magenta] (XOR1.west) -- (XOR1.east);
+		\draw[-, magenta] (XOR4.north) -- (XOR4.south);
+		\draw[-, magenta] (XOR1.north) -- (XOR1.south);
+		\draw[-, magenta] (XOR4.west) -- (XOR4.east);
+		\draw[-, magenta] (XOR3.west) -- (XOR3.east);
+		\draw[-latex] (register1.south)-- (XOR1.north);
+	\end{scope}
+	\end{tikzpicture}
+\caption{线性移位寄存器}
+
+\end{figure}
+
+%\thefigure
+若其初始状态为1101，则输出为110 110 110……,其周期为3.而$f(x)=1+x + x^3(1+x) = (1+x)(1+x^3)=(1+x)(1+x)(1+x+x^2)$。故序列的最小生成多项式可能为$f(x)=1+x$，$f(x)=(1+x)^2$或$f(x)=(1+x+x^2)$。其中前两者都只有一项参加反馈，故不可能。而第三者有两级参加反馈，即取序列当前项的前两项异或可得到当前项。验证可生成该序列。其最短线性移位寄存器为
+\begin{figure}[htbp]
+\centering
+	\tikzstyle{register}=[draw, thick, minimum width=1.5cm, minimum height=1cm, 
+                                    draw=magenta!100,
+                                    fill=pink!20
+                                    ]
+    \tikzstyle{XOR}=[circle,thick,minimum size=1cm,
+                                    draw=magenta!80,
+                                    fill=pink!20]
+
+\begin{tikzpicture}[thick]
+	\begin{scope}
+		\foreach \i in {2,1}{
+			\path
+			node (register\i) [register] at (-3*\i,0) {第$\i$级}%[xshift=3cm];
+			[yshift=-3cm]
+			node (XOR\i) [XOR] at (-3*\i,0) {};
+			\draw[-,magenta] (XOR\i.west) -- (XOR\i.east);
+			\draw[-,magenta] (XOR\i.north) -- (XOR\i.south);
+			\draw[-latex] (register\i.south) -- (XOR\i.north);
+			\draw[-latex] (register\i.west) -- ([xshift=-1.5cm]register\i.west);
+		}
+		\draw[-latex] (XOR2.east) -- (XOR1.west);
+		\draw[-latex] (XOR1.east) -- ([xshift=1.5cm]XOR1.east) -- ([xshift=1.5cm,yshift=3cm]XOR1.east) -- (register1.east);
+	\end{scope}
+\end{tikzpicture}
+\caption{最短线性移位寄存器}
+\end{figure}
+
+\section*{破译线性移位寄存器密码系统}
+由明文密文可以得到密钥流为1110100111，设该3级线性移位寄存器的特征多项式为$f(x)=x^3+c_1x^2+c_2x+c_3$，根据密钥流序列，可得到下列方程
+$$\begin{cases}
+	c_3+c_2+c_1=0\\
+	c_3+c_2=1\\
+	c_3+c_1=0
+\end{cases}
+$$
+得
+$$
+\begin{cases}
+	c_1=1\\
+	c_2=0\\
+	c_3=1
+\end{cases}
+$$
+故该密码系统使用的3级线性移位寄存器特征多项式是$f(x)=x^3+x^2+1$。
+\section*{BM算法}
+计算$d_{1}={1}$，
+$m=0$。
+$f_{2}(x) = f_{1}(x) + x^{1-0}f_{0}(x)$\\
+$f_{2}(x) = 1 + x  + x^{1}(1 )$\\
+$f_{2}(x) = 1 $\\
+$l_{2}=max(l_{1}, 2-l_{1})=1$
+
+~\\
+计算$d_{2}={0}$，
+$m=0$。
+$f_{3}(x) = f_{2}(x) = 1 $。
+$l_{3}=l_{2} = 1$
+
+~\\
+计算$d_{3}={1}$，
+$m=0$。
+$f_{4}(x) = f_{3}(x) + x^{3-0}f_{0}(x)$\\
+$f_{4}(x) = 1  + x^{3}(1 )$\\
+$f_{4}(x) = 1 + x^{3} $\\
+$l_{4}=max(l_{3}, 4-l_{3})=3$
+
+~\\
+计算$d_{4}={1}$，
+$m=3$。
+$f_{5}(x) = f_{4}(x) + x^{4-3}f_{3}(x)$\\
+$f_{5}(x) = 1 + x^{3}  + x^{1}(1 )$\\
+$f_{5}(x) = 1 + x + x^{3} $\\
+$l_{5}=max(l_{4}, 5-l_{4})=3$
+
+~\\
+计算$d_{5}={1}$，
+$m=3$。
+$f_{6}(x) = f_{5}(x) + x^{5-3}f_{3}(x)$\\
+$f_{6}(x) = 1 + x + x^{3}  + x^{2}(1 )$\\
+$f_{6}(x) = 1 + x + x^{2} + x^{3} $\\
+$l_{6}=max(l_{5}, 6-l_{5})=3$
+
+~\\
+计算$d_{6}={1}$，
+$m=3$。
+$f_{7}(x) = f_{6}(x) + x^{6-3}f_{3}(x)$\\
+$f_{7}(x) = 1 + x + x^{2} + x^{3}  + x^{3}(1 )$\\
+$f_{7}(x) = 1 + x + x^{2} $\\
+$l_{7}=max(l_{6}, 7-l_{6})=4$
+
+~\\
+计算$d_{7}={0}$，
+$m=6$。
+$f_{8}(x) = f_{7}(x) = 1 + x + x^{2} $。
+$l_{8}=l_{7} = 4$
+
+~\\
+计算$d_{8}={0}$，
+$m=6$。
+$f_{9}(x) = f_{8}(x) = 1 + x + x^{2} $。
+$l_{9}=l_{8} = 4$
+
+~\\
+计算$d_{9}={1}$，
+$m=6$。
+$f_{10}(x) = f_{9}(x) + x^{9-6}f_{6}(x)$\\
+$f_{10}(x) = 1 + x + x^{2}  + x^{3}(1 + x + x^{2} + x^{3} )$\\
+$f_{10}(x) = 1 + x + x^{2} + x^{3} + x^{4} + x^{5} + x^{6} $\\
+$l_{10}=max(l_{9}, 10-l_{9})=6$
+
+~\\
+计算$d_{10}={1}$，
+$m=9$。
+$f_{11}(x) = f_{10}(x) + x^{10-9}f_{9}(x)$\\
+$f_{11}(x) = 1 + x + x^{2} + x^{3} + x^{4} + x^{5} + x^{6}  + x^{1}(1 + x + x^{2} )$\\
+$f_{11}(x) = 1 + x^{4} + x^{5} + x^{6} $\\
+$l_{11}=max(l_{10}, 11-l_{10})=6$
+
+~\\
+计算$d_{11}={1}$，
+$m=9$。
+$f_{12}(x) = f_{11}(x) + x^{11-9}f_{9}(x)$\\
+$f_{12}(x) = 1 + x^{4} + x^{5} + x^{6}  + x^{2}(1 + x + x^{2} )$\\
+$f_{12}(x) = 1 + x^{2} + x^{3} + x^{5} + x^{6} $\\
+$l_{12}=max(l_{11}, 12-l_{11})=6$
+
+~\\
+计算$d_{12}={1}$，
+$m=9$。
+$f_{13}(x) = f_{12}(x) + x^{12-9}f_{9}(x)$\\
+$f_{13}(x) = 1 + x^{2} + x^{3} + x^{5} + x^{6}  + x^{3}(1 + x + x^{2} )$\\
+$f_{13}(x) = 1 + x^{2} + x^{4} + x^{6} $\\
+$l_{13}=max(l_{12}, 13-l_{12})=7$
+
+~\\
+计算$d_{13}={1}$，
+$m=12$。
+$f_{14}(x) = f_{13}(x) + x^{13-12}f_{12}(x)$\\
+$f_{14}(x) = 1 + x^{2} + x^{4} + x^{6}  + x^{1}(1 + x^{2} + x^{3} + x^{5} + x^{6} )$\\
+$f_{14}(x) = 1 + x + x^{2} + x^{3} + x^{7} $\\
+$l_{14}=max(l_{13}, 14-l_{13})=7$
+
+~\\
+计算$d_{14}={0}$，
+$m=12$。
+$f_{15}(x) = f_{14}(x) = 1 + x + x^{2} + x^{3} + x^{7} $。
+$l_{15}=l_{14} = 7$
+
+~\\
+计算$d_{15}={1}$，
+$m=12$。
+$f_{16}(x) = f_{15}(x) + x^{15-12}f_{12}(x)$\\
+$f_{16}(x) = 1 + x + x^{2} + x^{3} + x^{7}  + x^{3}(1 + x^{2} + x^{3} + x^{5} + x^{6} )$\\
+$f_{16}(x) = 1 + x + x^{2} + x^{5} + x^{6} + x^{7} + x^{8} + x^{9} $\\
+$l_{16}=max(l_{15}, 16-l_{15})=9$
+
+~\\
+计算$d_{16}={1}$，
+$m=15$。
+$f_{17}(x) = f_{16}(x) + x^{16-15}f_{15}(x)$\\
+$f_{17}(x) = 1 + x + x^{2} + x^{5} + x^{6} + x^{7} + x^{8} + x^{9}  + x^{1}(1 + x + x^{2} + x^{3} + x^{7} )$\\
+$f_{17}(x) = 1 + x^{3} + x^{4} + x^{5} + x^{6} + x^{7} + x^{9} $\\
+$l_{17}=max(l_{16}, 17-l_{16})=9$
+
+~\\
+计算$d_{17}={0}$，
+$m=15$。
+$f_{18}(x) = f_{17}(x) = 1 + x^{3} + x^{4} + x^{5} + x^{6} + x^{7} + x^{9} $。
+$l_{18}=l_{17} = 9$
+
+~\\
+计算$d_{18}={0}$，
+$m=15$。
+$f_{19}(x) = f_{18}(x) = 1 + x^{3} + x^{4} + x^{5} + x^{6} + x^{7} + x^{9} $。
+$l_{19}=l_{18} = 9$
+
+~\\
+计算$d_{19}={1}$，
+$m=15$。
+$f_{20}(x) = f_{19}(x) + x^{19-15}f_{15}(x)$\\
+$f_{20}(x) = 1 + x^{3} + x^{4} + x^{5} + x^{6} + x^{7} + x^{9}  + x^{4}(1 + x + x^{2} + x^{3} + x^{7} )$\\
+$f_{20}(x) = 1 + x^{3} + x^{9} + x^{11} $\\
+$l_{20}=max(l_{19}, 20-l_{19})=11$
+
+\begin{figure}[htbp]
+\centering
+	\tikzstyle{register}=[draw, thick, minimum width=0.5cm, minimum height=0.5cm, 
+                                    draw=magenta!100,
+                                    fill=pink!20
+                                    ]
+    \tikzstyle{XOR}=[circle,thick,minimum size=0.5cm,
+                                    draw=magenta!80,
+                                    fill=pink!20]
+
+\begin{tikzpicture}[thick]
+	\begin{scope}
+		\foreach \i in {11,...,1}{
+			\node (register\i) [register] at (-1.25*\i,0) {\i};%[xshift=3cm];
+			\draw[-latex] (register\i.west) -- ([xshift=-0.7cm]register\i.west);
+			\ifthenelse{\i=3 \OR \i=9 \OR \i=11}{
+				\node (XOR\i) [XOR] at (-1.25*\i,-1.5) {};
+				\draw[-,magenta] (XOR\i.west) -- (XOR\i.east);
+				\draw[-,magenta] (XOR\i.north) -- (XOR\i.south);
+				\draw[-latex] (register\i.south) -- (XOR\i.north);
+			}
+		}
+		\draw[-latex] (XOR11.east) -- (XOR9.west);
+		\draw[-latex] (XOR9.east) -- (XOR3.west);
+		\draw[-latex] (XOR3.east) -- ([xshift=3cm]XOR3.east) -- ([xshift=3cm,yshift=1.5cm]XOR3.east) -- (register1.east);
+	\end{scope}
+\end{tikzpicture}
+\caption{线性移位寄存器}
+\end{figure}
+
+
+
+生成BM算法计算过程的latex代码的如下：
+\begin{lstlisting}[title=bm.py, frame=shadowbox,language={[ANSI]C++}, keywordstyle=\color{blue!70}, commentstyle=\color{red!50!green!50!blue!50}, escapeinside=``, basicstyle=\tiny]
+seq="10011011000111010100"
+
+# if the i-th bit of the number f[i] in a binary form is 1,
+# then term x^i is in f(x)
+# example: 	if n-th function fn(x)=x^3 + x^2 + 1, 
+# 			then fn(x) will be encoded into the n-th element of array f, 
+# 			that is f[n] = int("0b1101",2)
+f = [0 for i in range(21)]
+l = [0 for i in range(21)]
+d = [0 for i in range(21)]
+f[0]=1
+f[1]=0b11 #f1(x)=x+1
+d[0]=1
+l[0]=0
+l[1]=1
+min = 0
+
+# @params f: the encoded decimal form of a function
+# @params n: the degree of the function f
+# convert f to a string
+# example: 	if f = 3, then f=0b11, the return string will be "1 + x"
+# 			if f = 11, then f=0b1011, the return string will be "1 + x^2 + x^3" 
+def ftostr(f,n):
+	fstr = "1 "
+	for i in range (1, len(bin(f))-2):
+		mask = 1 << i
+		if bin(f & mask) != '0b0':
+			if i > 1 : fstr+="+ x^{%d} " % i 
+			else: fstr+="+ x ".format(i)
+	fstr+=""
+	return fstr
+
+#to generate latex code of bm algorithm
+for i in range(1,20):
+	flen = len(bin(f[i]))-2
+	d[i] = f[i] & int("0b" + seq[i-flen+1:i+1],2)
+	print("compute $d_{%d}={%d}$," % (i, bin(d[i]).count('1') % 2))
+	print("$m={0}$.".format(min))
+	if bin(d[i]).count('1') % 2 == 1:
+		f[i+1] = f[i] ^ (f[min] << (i - min))
+		print("$f_{%d}(x) = f_{%d}(x) + x^{%d-%d}f_{%d}(x)$\\\\" % (i+1, i, i, min, min))
+		print("$f_{%d}(x) = %s + x^{%d}(%s)$\\\\" % (i+1, ftostr(f[i],i), i-min, ftostr(f[min],min)))
+		print("$f_{%d}(x) = %s$\\\\" % (i+1, ftostr(f[i+1],i+1)))
+		l[i+1] = max(l[i], i+1-l[i])
+		print("$l_{%d}=max(l_{%d}, %d-l_{%d})=%d$" % (i+1, i, i+1, i, l[i+1]) )
+		if i+1 - l[i] > l[i] : 
+			min = i
+	else:
+		f[i+1] = f[i]
+		print("$f_{%d}(x) = f_{%d}(x) = %s." % (i+1, i, ftostr(f[i+1],i+1)))
+		l[i+1] = l[i]
+		print("$l_{%d}=l_{%d} = %d$" % (i+1, i ,l[i]))
+	print("\n~\\\\")
+\end{lstlisting}
+\end{document}

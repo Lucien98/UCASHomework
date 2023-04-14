@@ -5,4 +5,8 @@
 *Tmp*
 *artRatex.sh
 2020Fall/Academic Ethics and Writing Norms/report/README.md
-
+*.aux
+*.log
+*.synctex.gz
+*.out
+*main.pdf
