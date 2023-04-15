@@ -1,0 +1,248 @@
+\documentclass{article}
+
+\usepackage{tikz}
+\usepackage[utf8]{inputenc}
+\usepackage{ctex}
+\usepackage{assignpkg}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{mathrsfs}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+  language=Octave,                % the language of the code
+  basicstyle=\footnotesize,           % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=2,                   % the step between two line-numbers. If it's 1, each line 
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},      % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                   % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{mauve},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add LaTeX within your code
+  morekeywords={*,...}               % if you want to add more keywords to the set
+}
+\usetikzlibrary{fpu}%修理不能使用ifthenelse的错误!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+\usetikzlibrary{math}%使用数学程序
+
+\studentIds{202XX80XXXXXXXX}{}
+\studentNames{XXX}{}
+
+\assignmentNumber{2}
+
+\date{\today}
+
+\begin{document}
+
+\makecover
+
+\section*{SPN结构的差分密码分析}
+\begin{figure}[htbp]
+\centering
+\tikzstyle{AddKey}=[draw, thick, minimum width=7cm, minimum height=0.6cm, 
+                                    draw=magenta!100,
+                                    fill=pink!20
+                                    ]
+\tikzstyle{sBox}=[draw, thick, minimum width=1cm, minimum height=1cm, 
+                                    draw=magenta!100,
+                                    fill=pink!20
+                                    ]
+
+\begin{tikzpicture}[thick]
+
+\path
+  node (addKey0) [AddKey, label=right:{$k_5$}] at (0,0) {$\oplus$}
+  %[yshift=2.8cm]
+  [yshift=1.6cm]
+
+  node (sbox00) [sBox] at (-3,0) {$S$}  
+  node (sbox01) [sBox] at (-1,0) {$S$}
+  node (sbox02) [sBox,label=right:{$S_{42}$}] at (1,0) {$S$}
+  node (sbox03) [sBox] at (3,0) {$S$}
+  [yshift=1.6cm]
+  node (addKey1) [AddKey, label=right:{$k_4$}] at (0,0) {$\oplus$}
+  [yshift=2.8cm]
+  node (sbox10) [sBox] at (-3,0) {$S$}  
+  node (sbox11) [sBox] at (-1,0) {$S$}
+  node (sbox12) [sBox] at (1,0) {$S$}
+  node (sbox13) [sBox] at (3,0) {$S$}
+  [yshift=1.6cm]
+  node (addKey2) [AddKey, label=right:{$k_3$}] at (0,0) {$\oplus$}
+  [yshift=2.8cm]
+  node (sbox20) [sBox] at (-3,0) {$S$}  
+  node (sbox21) [sBox] at (-1,0) {$S$}
+  node (sbox22) [sBox] at (1,0) {$S$}
+  node (sbox23) [sBox] at (3,0) {$S$}
+  [yshift=1.6cm]
+  node (addKey3) [AddKey, label=right:{$k_2$}] at (0,0) {$\oplus$}
+  [yshift=2.8cm]
+  node (sbox30) [sBox] at (-3,0) {$S$}  
+  node (sbox31) [sBox] at (-1,0) {$S$}
+  node (sbox32) [sBox] at (1,0) {$S$}
+  node (sbox33) [sBox] at (3,0) {$S$}
+  [yshift=1.6cm]
+  node (addKey4) [AddKey, label=right:{$k_1$}] at (0,0) {$\oplus$}
+  [yshift=2.8cm]
+  node (sbox40) [sBox] at (-3,0) {$S$}  
+  node (sbox41) [sBox] at (-1,0) {$S$}
+  node (sbox42) [sBox] at (1,0) {$S$}
+  node (sbox43) [sBox] at (3,0) {$S$}
+  [yshift=1.6cm]
+  node (addKey5) [AddKey, label=right:{$k_0$}] at (0,0) {$\oplus$};
+
+\begin{scope}[->,>=latex]
+    \foreach \k/\l in {5/4,4/3,3/2,2/1,1/0}{
+        \foreach \j in {0,...,3}{
+          \foreach \i in {0,...,3}{% 
+            \draw[->,magenta] ([xshift=(\i-16.5+10*\j)*0.2 cm]addKey\k.south) -- ([xshift=(\i-1.5)* 0.2 cm]sbox\l\j.north) ;}
+        }
+    }
+    \foreach \j in {0,...,3}{
+      \foreach \i in {0,...,3}{% 
+        \draw[->,magenta] ([xshift=(\i-1.5)* 0.2 cm]sbox0\j.south) -- ([xshift=(\i-16.5+10*\j)*0.2 cm]addKey0.north);}
+        }
+    \foreach \k in {4,3,2,1}{
+        \foreach \j in {0,1,2,3}{
+            \foreach \i in {0,1,2,3}{
+                \draw[->,magenta] ([xshift=(\i-1.5)*0.2 cm]sbox\k\j.south) --node{}++(0, -0.05) --([xshift= (\i-1.65+\j*0.1)*2 cm,yshift=0.25cm]addKey\k.north)--([xshift= (\i-1.65+\j*0.1)*2 cm]addKey\k.north);
+            }
+        }
+    }
+    \draw[->,thick] ([yshift=0.5cm,xshift=1.115cm]addKey5.north) -- ([xshift=1.115cm]addKey0.south);
+    \draw[->,thick,green] ([xshift=1.175cm,yshift=0.5cm]addKey5.north) 
+    -- ([xshift=0.175cm]sbox42.north) 
+    -- ([xshift=0.335cm]sbox42.south) 
+    -- ([xshift=0.335cm,yshift=-0.05cm]sbox42.south) 
+    -- ([xshift=3.125cm,yshift=0.2cm]addKey4.north) 
+    -- ([xshift=3.125cm]addKey4.north) 
+    -- ([xshift=0.125cm,yshift=-0.05cm]sbox33.south)
+    -- ([xshift=1.335cm,yshift=0.25cm]addKey3.north)
+    -- ([xshift=0.325cm]sbox22.north)
+    -- ([xshift=0.175cm]sbox22.south)
+    -- ([xshift=1.175cm]addKey0.south);
+    \draw[->,thick,blue] 
+    ([xshift=1.075cm,yshift=0.5cm]addKey5.north) 
+    -- ([xshift=0.075cm]sbox32.north) 
+    -- ([xshift=0.335cm]sbox32.south) 
+    -- ([xshift=0.335cm,yshift=-0.05cm]sbox32.south) 
+    -- ([xshift=3.125cm,yshift=0.2cm]addKey3.north) 
+    -- ([xshift=3.125cm]addKey3.north) 
+    -- ([xshift=0.125cm,yshift=-0.05cm]sbox23.south)
+    -- ([xshift=1.335cm,yshift=0.25cm]addKey2.north)
+    -- ([xshift=0.325cm]sbox12.north)
+    -- ([xshift=0.075cm]sbox12.south)
+    -- ([xshift=1.075cm]addKey0.south);
+    \draw[->,thick,orange] 
+    ([xshift=1.02cm,yshift=0.5cm]addKey5.north) 
+    -- ([xshift=0.03cm]sbox42.north) 
+    -- ([xshift=0.275cm]sbox42.south) 
+    -- ([xshift=3.175cm,yshift=0.2cm]addKey4.north) 
+    -- ([xshift=0.175cm]sbox33.north) 
+    -- ([xshift=0.325cm,yshift=-0.05cm]sbox33.south) 
+    -- ([xshift=0.325cm]sbox23.north) 
+    -- ([xshift=0.325cm, yshift=-0.05cm]sbox23.north) 
+    -- ([xshift=0.045cm,yshift=-0.05cm]sbox23.south)
+    -- ([xshift=1.255cm,yshift=0.25cm]addKey2.north)
+    -- ([xshift=0.245cm]sbox12.north)
+    -- ([xshift=-0.005cm]sbox12.south)
+    -- ([xshift=0.995cm]addKey0.south);
+\end{scope}
+\end{tikzpicture}
+\end{figure}
+\subsection*{$S$盒的差分分布表}
+该密码算法S盒的差分分布表如下：
+
+
+\begin{tabular}{ccccccccccccccccc}
+DDT &0  &1  &2  &3  &4  &5  &6  &7  &8  &9  &A  &B  &C  &D  &E  &F\\
+0   &16 &0  &0  &0  &0  &0  &0  &0  &0  &0  &0  &0  &0  &0  &0  &0\\
+1   &0  &0  &6  &0  &0  &0  &0  &2  &0  &2  &0  &0  &2  &0  &4  &0\\
+2   &0  &6  &6  &0  &0  &0  &0  &0  &0  &2  &2  &0  &0  &0  &0  &0\\
+3   &0  &0  &0  &6  &0  &2  &0  &0  &2  &0  &0  &0  &4  &0  &2  &0\\
+4   &0  &0  &0  &2  &0  &2  &4  &0  &0  &2  &2  &2  &0  &0  &2  &0\\
+5   &0  &2  &2  &0  &4  &0  &0  &4  &2  &0  &0  &2  &0  &0  &0  &0\\
+6   &0  &0  &2  &0  &4  &0  &0  &2  &2  &0  &2  &2  &2  &0  &0  &0\\
+7   &0  &0  &0  &0  &0  &4  &4  &0  &2  &2  &2  &2  &0  &0  &0  &0\\
+8   &0  &0  &0  &0  &0  &2  &0  &2  &4  &0  &0  &4  &0  &2  &0  &2\\
+9   &0  &2  &0  &0  &0  &2  &2  &2  &0  &4  &2  &0  &0  &0  &0  &2\\
+10  &0  &0  &0  &0  &2  &2  &0  &0  &0  &4  &4  &0  &2  &2  &0  &0\\
+11  &0  &0  &0  &2  &2  &0  &2  &2  &2  &0  &0  &4  &0  &0  &2  &0\\
+12  &0  &4  &0  &2  &0  &2  &0  &0  &2  &0  &0  &0  &0  &0  &6  &0\\
+13  &0  &0  &0  &0  &0  &0  &2  &2  &0  &0  &0  &0  &6  &2  &0  &4\\
+14  &0  &2  &0  &4  &2  &0  &0  &0  &0  &0  &2  &0  &0  &0  &0  &6\\
+15  &0  &0  &0  &0  &2  &0  &2  &0  &0  &0  &0  &0  &0  &10 &0  &2
+
+\end{tabular}
+\subsection*{差分攻击的攻击方法}
+首先针对S盒产生差分分布表，根据差分分布表，寻找到出现概率较高的一个差分。然后产生足够多的差分明文对，生成相应的密文对。然后穷举密钥，将每一个密钥与密文对进行运算从而反向推导出S盒的输入差分，观察输入差分与我们所设想的差分的是否相同。若相同，则为当前穷举的密钥计一票，若不同，则不计票。其中最重要的步骤是得先找到那条高概率的差分。
+\subsection*{高概率差分}
+根据《$The\ Block\ Cipher\ Companion$》书中所描绘的，对于该密码算法，有4条高概率的差分路径满足
+$(0,0,2,0) \stackrel {\mathscr{R}} {\longrightarrow} ? \stackrel{\mathscr{R}}{\longrightarrow} ? \stackrel{\mathscr{R}}{\longrightarrow} ?\stackrel{\mathscr{R}}{\longrightarrow}(0,0,2,0)\cdots\cdots(1)$
+
+分别是：\\
+图中黑色差分路径：
+$$(0,0,2,0) \stackrel {\mathscr{R}} {\longrightarrow}  (0,0,2,0) \stackrel{\mathscr{R}}{\longrightarrow} (0,0,2,0) \stackrel{\mathscr{R}}{\longrightarrow}  (0,0,2,0) \stackrel{\mathscr{R}}{\longrightarrow} (0,0,2,0)$$
+图中橙色差分路径：
+$$(0,0,2,0) \stackrel {\mathscr{R}} {\longrightarrow}  (0,0,0,2) \stackrel{\mathscr{R}}{\longrightarrow}  (0,0,0,1) \stackrel{\mathscr{R}}{\longrightarrow}  (0,0,1,0) \stackrel{\mathscr{R}}{\longrightarrow}(0,0,2,0)$$
+图中绿色差分路径：
+$$(0,0,2,0) \stackrel {\mathscr{R}} {\longrightarrow}  (0,0,0,2) \stackrel{\mathscr{R}}{\longrightarrow}  (0,0,1,0) \stackrel{\mathscr{R}}{\longrightarrow}  (0,0,2,0) \stackrel{\mathscr{R}}{\longrightarrow}(0,0,2,0)$$
+图中蓝色差分路径：
+$$(0,0,2,0) \stackrel {\mathscr{R}} {\longrightarrow}  (0,0,2,0) \stackrel{\mathscr{R}}{\longrightarrow}  (0,0,0,2) \stackrel{\mathscr{R}}{\longrightarrow}  (0,0,1,0) \stackrel{\mathscr{R}}{\longrightarrow}(0,0,2,0)$$
+
+则对于差分$(1)$，其出现的概率大于上述四条差分路径出现概率之和$4\times(\frac{6}{16})^4=\frac{81}{1024}$。
+差分$(1)$出现的概率高于一个差分随机出现的概率$(\frac{1}{16})$，证明该差分路径将不会随机出现的差分受到干扰。
+\subsection*{过滤}
+所谓过滤，就是将不属于该差分的明密文差分对剔除出去，在本次差分攻击中，可以看到，在图中的$S$盒$S_{42}$的输出差分为$2$，那么根据差分分布表，$S_{42}$的输出差分只可能是${1,2,9,a}$，据此就可以将密文输出差分不是${1,2,9,a}$的明文密文差分对排除。
+\subsection*{计票}
+在这次攻击中，我们猜测密钥$K_5$的第8-11比特。对于这四比特的所有16种取值，将过滤之后得到的密文对中相应的比特位与密钥的这四比特进行异或，得到$S$盒的输出，反向推导出$S$盒的输入，进而计算它们的差分，若差分为$2$，则为当前的密钥四比特计上一票。最终取投票最多的密钥为正确的密钥。
+\subsection*{运行结果说明}
+安装并配置好ruby环境，在命令行模式下进入diff-attack.rb所在的目录，执行命令
+\begin{lstlisting}[frame=shadowbox]
+$ruby diff-attack.rb
+\end{lstlisting}
+程序将产生一个随机密钥，并打印出来，同时提示我们这次攻击要猜测的密钥值（也就是打印出来的密钥的倒数4-8位，即最后一轮的轮密钥的第8-11位（以0为第一个索引））。之后稍等一段时间，程序将进行攻击。攻击结束后，程序将打印出票数最多的十个密钥值。格式为$\{the\ key\ value\ in\ decimal\}\ =>\ the\ ratio\ that\ the\ counter\ number\ to\ 65536$。
+
+接着，程序将提示，攻击结束后猜测的密钥值为多少。若猜测正确，则打印出$Attack\ successed!$。
+一个可能的程序输出如下：
+\begin{lstlisting}[title=result, frame=shadowbox]
+the generated 96-bit random key is
+[0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0]
+the key we want to recover is subkey 5 bits 8-11: [1, 1, 0, 1]
+
+Here are the sorted best 10 results from analysis:
+{13} => 0.083526611328125
+{15} => 0.05609130859375
+{12} => 0.05328369140625
+{3} => 0.0462646484375
+{1} => 0.0462646484375
+{14} => 0.0430908203125
+{2} => 0.041839599609375
+{0} => 0.041168212890625
+{4} => 0.032440185546875
+{7} => 0.026336669921875
+Result:the most probable subkey 5 bits 8-11 is 13 in decimal whose binary is [1, 1, 0, 1]
+Attack successed!
+
+\end{lstlisting}
+
+
+\end{document}

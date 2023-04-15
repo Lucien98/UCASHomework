@@ -1,0 +1,36 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{assignment}[2020/02/26 Assignment Package]
+
+\RequirePackage{graphicx}
+
+\newcommand{\studentIds}[2]{
+    \renewcommand{\@studentOneId}{#1}
+    \renewcommand{\@studentTwoId}{#2}
+}
+\newcommand{\@studentOneId}{\@latex@error{No \noexpand\studentIds given}\@ehc}
+\newcommand{\@studentTwoId}{\@latex@error{No \noexpand\studentIds given}\@ehc}
+
+\newcommand{\studentNames}[2]{
+    \renewcommand{\@studentOneName}{#1}
+    \renewcommand{\@studentTwoName}{#2}
+}
+\newcommand{\@studentOneName}{\@latex@error{No \noexpand\studentNames given}\@ehc}
+\newcommand{\@studentTwoName}{\@latex@error{No \noexpand\studentNames given}\@ehc}
+
+\newcommand{\assignmentNumber}[1]{\renewcommand{\@assignmentNumber}{#1}}
+\newcommand{\@assignmentNumber}{\@latex@error{No \noexpand\assignmentNumber given}\@ehc}
+
+\newcommand{\makecover}{
+	\begin{center}
+		\includegraphics[width=250pt]{OIP.jpg}
+	\end{center}
+    
+    \title{密码分析学 \#\@assignmentNumber}
+    \author{\@studentOneName\hspace{1pt} : \@studentOneId }
+    
+    \vspace{\fill}
+    {\let\newpage\relax\maketitle}
+    \vspace{\fill}
+    
+    \newpage
+}
