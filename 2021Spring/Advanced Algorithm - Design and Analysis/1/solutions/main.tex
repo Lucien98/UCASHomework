@@ -1,0 +1,205 @@
+\documentclass{article}
+\usepackage{geometry}
+\geometry{a4paper,scale=0.8}
+
+\usepackage[utf8]{inputenc}
+\usepackage{ctex}
+\usepackage{assignpkg}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\studentIds{202XX80XXXXXXXX}{}
+\studentNames{XXX}{}
+
+\assignmentNumber{1}
+
+\date{\today}
+
+\begin{document}
+
+\makecover
+
+\section*{1}
+先证$(\frac{n}{m})^m\leq \binom{n}{m}$。当$0\leq i < m\leq n$时，有$\frac{n-i}{m-i}\geq\frac{n}{m}$
+\begin{equation*}
+\begin{split}
+\binom{n}{m}&=\prod_{i=0}^{m-1}\frac{n-i}{m-i}\\
+&\leq\prod_{i=0}^{m-1}\frac{n}{m}\\
+&=(\frac{n}{m})^m
+\end{split}
+\end{equation*}
+
+得证。
+\\\\
+
+再证$\binom{n}{m}\leq (\frac{ne}{m})^m$。采用数学归纳法。
+
+当$m=1\leq n$时，$\binom{n}{m}=\binom{n}{1}=n \leq (\frac{ne}{1})^1=ne$，该不等式成立。
+
+当$m=2\leq n$时，$\binom{n}{m}=\binom{n}{2}=\frac{n(n-1)}{2} \leq \frac{n^2e^2}{4} = (\frac{ne}{m})^m$，该不等式成立。
+
+不难验证，归纳假设只需验证当不等式在$(m-1,n-1)$成立时，其在$(m,n)$也成立，就可证明原不等式在对任意的$(m,n)$都成立。
+
+假设当$2\leq m \leq n$时，不等式在$(m-1,n-1)$成立，即$\binom{n-1}{m-1}\leq (\frac{(n-1)e}{m-1})^{m-1}$。
+
+首先可以证明：$\frac{(\frac{ne}{m})^m}{(\frac{(n-1)e}{m-1})^{m-1}}\geq \frac{n}{m}$。证明如下：
+
+\begin{equation*}
+\begin{split}
+\frac{(\frac{ne}{m})^m}{(\frac{(n-1)e}{m-1})^{m-1}}&=\frac{n}{m}e(\frac{n(m-1)}{m(n-1)})^{m-1}\\
+&\geq \frac{n}{m}(1+\frac{1}{m-1})^{m-1}(\frac{n(m-1)}{m(n-1)})^{m-1}\\
+&=\frac{n}{m}(\frac{m}{m-1})^{m-1}(\frac{n(m-1)}{m(n-1)})^{m-1}\\
+&=\frac{n}{m}(\frac{n}{n-1})^{m-1}\\
+&\geq \frac{n}{m}
+\end{split}
+\end{equation*}
+
+则在$(m,n)$处，
+\begin{equation*}
+\begin{split}
+\binom{n}{m}&=\binom{n-1}{m-1}\frac{n}{m}\\
+&\leq (\frac{(n-1)e}{m-1})^{m-1}\frac{(\frac{ne}{m})^m}{(\frac{(n-1)e}{m-1})^{m-1}}\\
+&= (\frac{ne}{m})^m
+\end{split}
+\end{equation*}
+
+得证。
+
+\clearpage
+\section*{2}
+第$i$次才第一次出现正面的概率为$P(T=i) = (1-p)^{i-1}p$
+% \begin{equation*}
+% \begin{split}
+% \mathbb{E}(T)&=\sum_{n=1}^{+\infty}iP(T=i)\\
+% &=\sum_{n=1}^{+\infty} i(1-p)^{i-1}p
+% \end{split}
+% \end{equation*}
+
+已知级数$$\sum_{n=1}^{+\infty} nx^{n-1}=(\sum_{1}^{+\infty}x^n)^{'}=(\frac{1}{1-x})^{'}=\frac{1}{(1-x)^2}$$
+
+则
+\begin{equation*}
+\begin{split}
+\mathbb{E}(T)&=\sum_{n=1}^{+\infty}iP(T=i)\\
+&=\sum_{n=1}^{+\infty} i(1-p)^{i-1}p\\
+&=p(\sum_{n=1}^{+\infty} i(1-p)^{i-1})\\
+&=p(\frac{1}{(1-(1-p))^2})\\
+&=\frac{1}{p}
+\end{split}
+\end{equation*}
+
+已知级数
+$$\sum_{n=1}^{+\infty}n^2x^{n-1}=(\sum_{n-1}^{+\infty}nx^n)^{'}=(x(\sum_{n=1}^{+\infty}nx^{n-1}))^{'}=(\frac{x}{(x-1)^2})^{'}=\frac{x+1}{(1-x)^3}$$
+
+则
+\begin{equation*}
+\begin{split}
+\mathbb{E}(T^2)&=\sum_{n=1}^{+\infty}i^2P(T=i)\\
+&=\sum_{n=1}^{+\infty} i^2(1-p)^{i-1}p\\
+&=p(\sum_{n=1}^{+\infty} i^2(1-p)^{i-1})\\
+&=p(\frac{1-p+1}{(1-(1-p))^3})\\
+&=\frac{2-p}{p^2}
+\end{split}
+\end{equation*}
+
+故$\mathbb{D}T=\mathbb{E}(T^2)-(\mathbb{E}T)^2=\frac{1-p}{p^2}$
+
+\clearpage
+\section*{3}
+证明：
+
+取$\lambda>0$。
+
+\begin{align*}
+Pr(X\leq (1-\delta)\mu)&=Pr(e^{\lambda X}\le e^{\lambda (1-\delta)\mu}) \\
+& \le \frac{\mathbb{E}(e^{\lambda X})}{e^{\lambda (1-\delta)\mu}} &\text{Markov不等式}\\
+& = \frac{\mathbb{E}(\prod_{i=1}^ne^{\lambda Y_i})}{e^{\lambda (1-\delta)\mu}}\\
+& = \frac{\prod_{i=1}^n\mathbb{E}(\lambda Y_i)}{e^{\lambda (1-\delta)\mu}}\\
+& = \frac{\prod_{i=1}^n(p_ie^{\lambda}+1-p_i)}{e^{\lambda (1-\delta)\mu}}\\
+& \le \frac{\prod_{i=1}^ne^{p_i(e^\lambda-1)}}{e^{\lambda (1-\delta)\mu}} & e^x+1\ge x\\
+& = \frac{e^{(e^{\lambda}-1)(\sum_{i-1}^np_i)}}{e^{\lambda (1-\delta)\mu}}\\
+& = \frac{e^{(e^{\lambda}-1)\mu}}{e^{\lambda (1-\delta)\mu}}\\
+& = (\frac{e^{e^{\lambda}-1}}{e^{\lambda (1-\delta)}})^{\mu}\\
+\end{align*}
+
+令$\lambda=\ln (1-\delta)$，则$(\frac{e^{e^{\lambda}-1}}{e^{\lambda (1-\delta)}})^{\mu}=(\frac{e^{-\delta}}{e^{(1-\delta)\ln (1-\delta)}})^{\mu}=(\frac{e^{-\delta}}{(1-\delta)^{1-\delta}})^{\mu}
+$
+
+我们将$\frac{e^{-\delta}}{(1-\delta)^{1-\delta}}$取对数，则
+\begin{align*}
+\ln \frac{e^{-\delta}}{(1-\delta)^{1-\delta}}&=-\delta-(1-\delta)\ln (1-\delta)\\
+&=-\delta - (1-\delta)(\sum_{n=1}^{+\infty}-\frac{-\delta^n}{n})\\
+&=-\delta - (-\delta+\frac{\delta^2}{2}+\sum_{n=3}^{+\infty}\frac{1}{n(n-1)}\delta^n)\\
+&=-\frac{\delta^2}{2}-(\sum_{n=3}^{+\infty}\frac{1}{n(n-1)}\delta^n)\\
+& \le -\frac{\delta^2}{2}
+\end{align*}
+
+故$(\frac{e^{-\delta}}{(1-\delta)^{1-\delta}})^{\mu}\le e^{-\frac{\delta^2}{2}\mu}$
+
+\clearpage
+
+\section*{4}
+定义随机变量$X_i,i=1,\cdots,|V|,$
+\begin{equation*}
+X_i=
+\begin{cases}
+0, &\text{顶点$u_i \in A$}\\
+1, &\text{顶点$u_i \notin A$}
+\end{cases}
+\end{equation*}
+则有Pr($X_i=0$)=Pr($X_i=1$)=$\frac{1}{2}$。
+
+对于边集$E$中的任意一条边$(u_i,u_j)$，有
+$$\Pr((u_i,u_j)\in E(A,B))=\Pr(X_i\neq X_j)=\frac{1}{2}$$
+
+对于任意的$(u_i,u_j)\in E$，定义随机变量$Y_{i,j}$如下，
+\begin{equation*}
+Y_{i,j}=
+\begin{cases}
+0, &(u_i,u_j) \notin E(A,B)\\
+1, &(u_i,u_j) \in E(A,B)
+\end{cases}
+\end{equation*}
+
+则$\mathbb{E}(Y_{i,j})=\frac{1}{2},\mathbb{D}(Y_i,j)=\frac{1}{4}$
+\begin{align*}
+\mathbb{D}(|E(A,B)|)&=\mathbb{D}[\sum_{(u_i,u_j)\in E}Y_{i,j}]\\
+&=\sum_{(u_i,u_j)\in E} \mathbb{D}(Y_{i,j})\\
+&=\frac{|E|}{4}
+\end{align*}
+\section*{5}
+记图$G$中的顶点个数为$n$，并将其分别编号为1，2，……，n。假设图中恰好存在一个完美匹配。
+
+设计的算法描述如下：
+\begin{itemize}
+\item[1]
+根据图中的边颜色等信息构造一个$n$阶方阵$A$，其每一项定义为：
+\begin{equation*}
+A(i,j) = 
+\begin{cases}
+y, & e = (i,j) \in E\ and\ c(e)=red\\
+1, & e = (i,j) \in E\ and\ c(e)=blue\\
+0, & otherwise
+\end{cases}
+\end{equation*}
+
+\item[2]
+随机选择n+1个数，$y_0,y_1,\cdots,y_n$，分别以这$n+1$个数代y，计算$det(A)$，得到$n+1$个对应的值$p(y_0),p(y_2),\cdots,p(y_n)$。用这$n+1$个点$\{(y_0,p(y_0)),(y_1,p(y_1)),\cdots,(y_n,p(y_n))\}$进行拉格朗日插值。得到一个多项式函数$p(y)$。
+
+\item[3]
+若拟合出来的多项式包含$\pm y^k$项，则输出$Yes$。
+
+若拟合出来的多项式不包含$\pm y^k$项，则输出$No$。
+\end{itemize}
+
+分析：这样拟合出来的多项式是唯一的吗？
+
+回答：这样拟合出来的多项式是唯一的，因为根据$A(i,j)$的定义，能计算出$A$的行列式是关于$y$的多项式函数，这个多项式函数是唯一的。
+
+分析：若不存在$\pm y^k$项，那么是否可能是因为存在多个红蓝匹配，它们由于符号的原因互相抵消了呢？
+
+回答：这种情况也是可能存在的，而且这个问题可能无法通过多次运行上述算法解决。因为多项式函数是唯一的，选取其他点进行拟合也只能拟合出一样的结果。问题的解决办法暂无。但是如果假设图中只存在一个红蓝匹配，那么这个算法将是始终有效的。
+
+分析：为什么需要选取$n+1$个点进行拟合？
+
+回答：因为$det(A)$最多是关于$y$的$n$次函数，而拟合$n$次函数需要$n+1$个点确定该函数的$n+1$个系数。
+\end{document}
