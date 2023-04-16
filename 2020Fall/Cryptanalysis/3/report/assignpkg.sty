@@ -1,0 +1,36 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{assignment}[2020/02/26 Assignment Package]
+
+\RequirePackage{graphicx}
+
+\newcommand{\studentIds}[1]{
+    \renewcommand{\@studentOneId}{#1}
+}
+\newcommand{\@studentOneId}{\@latex@error{No \noexpand\studentIds given}\@ehc}
+\newcommand{\@studentTwoId}{\@latex@error{No \noexpand\studentIds given}\@ehc}
+
+\newcommand{\studentNames}[1]{
+    \renewcommand{\@studentOneName}{#1}
+    
+}
+\newcommand{\@studentOneName}{\@latex@error{No \noexpand\studentNames given}\@ehc}
+\newcommand{\@studentTwoName}{\@latex@error{No \noexpand\studentNames given}\@ehc}
+
+\newcommand{\assignmentNumber}[1]{\renewcommand{\@assignmentNumber}{#1}}
+\newcommand{\@assignmentNumber}{\@latex@error{No \noexpand\assignmentNumber given}\@ehc}
+
+\newcommand{\makecover}{
+	\begin{center}
+		\includegraphics[width=250pt]{OIP.jpg}
+	\end{center}
+    
+    \title{\textbf{流密码相关攻击论文阅读报告}}
+    \author{\@studentOneName\hspace{1pt} : \@studentOneId}
+    %\author{ }
+    
+    \vspace{\fill}%make the space under and above the title equal
+    {\let\newpage\relax\maketitle} %maketitle
+    \vspace{\fill}
+    
+    \newpage
+}
