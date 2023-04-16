@@ -1,0 +1,69 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{ctex}
+\usepackage{assignpkg}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\studentIds{202XX80XXXXXXXX}{}
+\studentNames{XXX}{}
+
+\assignmentNumber{2}
+
+\date{\today}
+
+\begin{document}
+
+\makecover
+\section*{求均匀分布的期望}
+$X~U(a,b)$
+区间(a,b)上的均匀分布，其概率密度为：
+
+\begin{equation}
+	f(x) = \left\{
+	\begin{aligned}
+		&\frac{1}{b-a} ,\ a< x < b\\
+		&0,\ other
+	\end{aligned}
+	\right.
+\end{equation}
+其数学期望为：
+
+\begin{align*}
+E(X) &= \int^{+\infty}_{-\infty}xf(x)dx \\
+&=\int_{-\infty}^{a} x\times 0dx+\int_{a}^{b}x\frac{1}{b-a}dx + \int_{b}^{+\infty} x\times0dx\\
+&=0+\frac{x^2}{2(b-a)}|_{a}^{b}+0\\
+&=\frac{a+b}{2}\\
+\end{align*}
+\section*{求指数分布的期望和方差}
+设$\xi$服从指数分布：
+
+\begin{equation}
+	f(x)=\left\{
+	\begin{aligned}
+		& be^{-bx},\ x\geq 0\\
+		& 0,\ x< 0
+	\end{aligned}
+	\right.
+\end{equation}
+其数学期望为：
+\begin{align*}
+E(\xi)&=\int_{-\infty}^{+\infty}\xi f(\xi)d\xi\\
+&=\int_{-\infty}^{0}\xi\times0dx + \int_{0}^{+\infty}\xi b e^{-b \xi}d\xi\\
+&=0-\int_{0}^{+\infty}\xi d e^{-b\xi}\\
+&=\int_{0}^{+\infty} e^{-b\xi}d\xi -\xi e^{-b\xi}|_{0}^{+\infty}\\
+&=(-\frac{1}{b}e^{-b\xi}) |_{0}^{+\infty}-0\\
+&=\frac{1}{b}
+\end{align*}
+其方差为
+\begin{align*}
+D(\xi)&=E(\xi ^2)-(E\xi)^2\\
+&=\int_{-\infty}^{+\infty}\xi ^2f(\xi)d\xi - (\frac{1}{b})^2 \\
+&= \int_{0}^{+\infty}\xi ^2b e^{-b \xi}d\xi - \frac{1}{b^2}\\
+&= -\int_{0}^{+\infty}\xi ^2de^{-b\xi} - \frac{1}{b^2}\\
+&= - \xi ^2e^{-b\xi}|_{0}^{+\infty}+\int_{0}^{+\infty}2\xi e^{-b\xi}d\xi - \frac{1}{b^2}\\
+&=2\frac{1}{b} \int_{0}^{+\infty}\xi b e^{-b\xi}d\xi -\frac{1}{b^2}\\
+&=2\frac{1}{b}E(X)-\frac{1}{b^2}\\
+&=\frac{1}{b^2}\\
+\end{align*}
+\end{document}

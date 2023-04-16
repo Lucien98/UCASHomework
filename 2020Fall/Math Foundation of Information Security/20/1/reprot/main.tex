@@ -1,0 +1,59 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{ctex}
+\usepackage{assignpkg}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\studentIds{202XX80XXXXXXXX}{}
+\studentNames{XXX}{}
+
+\assignmentNumber{1}
+
+\date{\today}
+\newcommand{\twooverline}[1]{\overline{\overline{#1}}}
+\newcommand{\threeoverline}[1]{\overline{\overline{\overline{#1}}}}
+%\newcommand{\mybar}[1]{\bar{\bar{#1}}}
+
+\begin{document}
+
+\makecover
+\section*{第一题}
+\begin{align*}
+&A_1=A\cup B \cup C\\
+&A_2=A \overline B\overline C \cup \overline A B \overline C \cup \overline A\overline B C\\
+&A_3=AB\overline C \cup A\overline B C \cup \overline ABC\\
+&A_4=\overline{ABC}\cup A \overline B\overline C \cup \overline A B \overline C \cup \overline A\overline B C\\
+&A_6=ABC\\
+&A_6=\overline{ABC}\\	
+\end{align*}
+\section*{第二题}
+设其中有黑球为事件A\\
+\begin{align*}
+&N(\Omega)=C_{50}^{3}=\frac{50\times49\times48}{3\times2\times1}=19600\\
+&P(A)=\frac{C_{45}^0C_{5}^3 + C_{45}^1C_{5}^2 + C_{45}^2C_{5}^1}{N(\Omega)}=\frac{541}{1960}\\
+\end{align*}
+\section*{第三题}
+性质1： $A,B$独立$\iff\ A,\overline B$独立$\iff\ \overline A,B$独立$\iff\ \overline A,\overline B$独立。
+
+首先证明$A,\overline B$独立$\rightarrow\ A,B$独立（不妨称之为【theorem1.1】）。
+
+\begin{align*}
+P(AB)&=P(A)-P(A\overline B)\\
+&=P(A)-P(A)P(\overline B)\\
+&=P(A)(1-P(\overline B))\\
+&=P(A)P(B)
+\end{align*}
+故【theorem1.1】得证。
+
+若$A,B$独立，即$A,\twooverline {B}$独立，那么由【theorem1.1】，可推得$A,\overline {B}$独立。
+由此，可推出
+$A,B$独立$\Leftrightarrow A,\overline B$独立【theorem1.2】。
+
+$A,B$独立$\Leftrightarrow B,A$独立$\stackrel{theorem1.2}\Longleftrightarrow B,\overline A$独立$\Leftrightarrow \overline A,  B$独立，即$A,B$独立$\Leftrightarrow \overline A,  B$独立【theorem1.3】。
+
+$A,B$独立$\stackrel{theorem1.2}\Longleftrightarrow A,\overline B$独立$\stackrel{theorem1.3}\Longleftrightarrow \overline A,\overline B$独立【theorem1.4】。
+
+综上theorem1.2、1.3、1.4，性质1得证。
+
+\end{document}

@@ -1,0 +1,39 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{ctex}
+\usepackage{assignpkg}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\studentIds{202XX80XXXXXXXX}{}
+\studentNames{XXX}{}
+
+\assignmentNumber{3}
+
+\date{\today}
+
+\begin{document}
+
+\makecover
+求证：\[H(XY)=H(X)+H(Y)-I(X;Y)\]
+证明：
+\begin{align*}
+H(XY)+I(X;Y)&=-(\sum_{i=1}^n \sum_{j=1}^m P(x_i, y_j)log_2P(x_i,y_j)+\sum_{i=1}^n \sum_{j=1}^m P(x_i,y_j)log_2\frac{P(x_i)}{P(x_i|y_j)})\\
+&=-(\sum_{i=1}^n\sum_{j=1}^m P(x_i,y_j)log_2(\frac{P(x_i,y_j)P(x_i)}{P(x_i|y_j)}))\\
+&=-(\sum_{i=1}^n\sum_{j=1}^mP(x_i,y_j)log_2\frac{P(y_j)P(x_i|y_j)P(x_i)}{P(x_i|y_j)})\\
+&=-(\sum_{i=1}^n\sum_{j=1}^mP(x_i,y_j)log_2(P(x_i)P(y_j)))\\
+&=-(\sum_{i=1}^n\sum_{j=1}^mP(x_i,y_j)log_2P(x_i) + \sum_{i=1}^n\sum_{j=1}^m P(x_i,y_j)log_2P(y_j))\\
+&=-(\sum_{i=1}^n(\sum_{j=1}^m P(x_i,y_j))log_2P(x_i) + \sum_{j=1}^m(\sum_{i=1}^nP(x_i,y_j))P(y_j))\\
+&=-(\sum_{i=1}^nP(x_i)log_2P(x_i) + \sum_{j=1}^mP(y_j)log_2P(y_j))\\
+&=H(X)+H(Y)\\
+\end{align*}
+故命题得证。
+\end{document}
+
+
+
+
+
+
+
+
