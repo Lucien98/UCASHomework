@@ -1,0 +1,97 @@
+%!TEX options = --shell-escape -8bit
+\documentclass{article}
+\usepackage{geometry}
+\geometry{a4paper, scale=0.8}
+
+\usepackage[utf8]{inputenc}
+\usepackage{ctex}
+\usepackage{assignpkg}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage[cache=false]{minted}
+\studentIds{202XX80XXXXXXXX}{}
+\studentNames{XXX}{}
+
+\assignmentNumber{2}
+
+\date{\today}
+
+\begin{document}
+
+% \makecover
+\section*{课后作业} % (fold)
+\label{sec:课后作业}
+	\subsection*{要求} % (fold)
+	\label{sub:要求}
+		\begin{enumerate}
+			\item Iris 数据集是常用的分类实验数据集，由 Fisher, 1936收集整理。 Iris 也称鸢尾花卉数据集，是一类多重变 量分析的数据集。数据集包含 150 个数据样本，分为 3类 ，每类50 个数据，每个数据包含 4个属性。可通 过花萼长度 ，花萼宽度 ，花瓣长度，花瓣宽瓣4个属 性预测鸢尾花卉属于（ Setosa ，Versicolour， Virginica ）三个种类中的哪一类。
+			\item 数据下载： http://archive.ics.uci.edu/ml/datasets/iris
+			\item 编程设计三层 BP 神经网络实现 Iris 数据集的分类
+		\end{enumerate}
+	% subsection 要求 (end)
+	\subsection*{参考代码} % (fold)
+	\label{sub:参考代码}
+
+\begin{minted}[
+frame = single,
+breaklines,tabsize=2,
+baselinestretch=1,
+linenos=false
+]{python}
+def forward(self,inputs):
+	"""前向传播"""
+	if len(inputs) != self.ni - 1:
+		raise ValueError('与输入层节点数不符!')
+	
+	# 激活输入层
+	for i in range(self.ni- 1):
+		self.ai[i] = inputs[i]
+	
+	# 激活隐藏层
+	for j in range(self.nh):
+		sum = 0.0
+		for i in range(self.ni):
+			sum = sum + self.ai[i] * self.wi[i][j]
+		self.ah[j] = sigmoid(sum)
+	
+	# 激活输出层
+	for k in range(self.no):
+		sum = 90
+		for j in range(self.nh):
+			sum = sum + self.ah[j] * self.wo[j][k]
+		self.ao[k] = sigmoid(sum)
+	
+	return self.ao[:]
+
+def backPropagate(self,targets,lr):
+	"""反向传播"""
+	# 计算输出层的误差
+	output_deltas = [0.0] * self.no
+	for k in range(self.no):
+		error = targets[k] - self.ao[k]
+		output_deltas[k] = dsigmoid(self.ao[k]) * error
+
+	#计算隐藏层的误差
+	hidden_deltas = [0.0] * self.nh
+	for j in range(self.nh):
+		error = 0.0
+		for k in range(self.no):
+			error = error + output_deltas[k] * self.wo[j][k]
+		hidden_deltas[j] = dsigmoid(self.ah[j]) * error
+	#更新输出层权重
+	for j in range(self.nh):
+		for k in range(self.no):
+			change = output_deltas[k] * self.ah[j]
+			self.wo[j][k] = self.wo[j][k] + lr * change
+	#更新输入层权重
+	for i in range(self.ni):
+		for j in range(self.nh):
+		change = hidden_deltas[j] * self.ai[i]
+		self.wi[i][j] = self.wi[i][j] + lr * change
+	#计算误差
+	error = 0.0
+	error += 0.5 * (targets[k] - self.ao[k]) ** 2
+	return error
+\end{minted}    
+\end{document}
