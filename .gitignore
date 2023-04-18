@@ -10,3 +10,4 @@
 *.synctex.gz
 *.out
 *main.pdf
+*_minted-main*

@@ -1,0 +1,73 @@
+\documentclass{article}
+\usepackage{geometry}
+\geometry{a4paper, scale=0.8}
+
+\usepackage[utf8]{inputenc}
+\usepackage{ctex}
+\usepackage{assignpkg}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\studentIds{202XX80XXXXXXXX}{}
+\studentNames{XXX}{}
+
+\assignmentNumber{5}
+
+\date{\today}
+
+\begin{document}
+
+\makecover
+
+\subsubsection*{第一题}
+\begin{itemize}
+\item[a.]
+$p(x_1, x_2, x_3, x_4, x_5, x_6) = p(x_1)p(x_2)p(x_3 | x_1,x_2)p(x_5 | x_2)p(x_4 | x_3)p(x_6 | x_3, x_5) $
+
+\item[b.]
+随机变量$x_1$和$x_6$之间存在路径$(x_1 , x_3, x_6)$，根据D-Seperation定理，顶点$x_3$为head-to-tail节点，需要出现在已观测集合中，$x_1$和$x_6$才独立。也就是说，$x_1$和$x_6$不独立，但是在给定$x_3$的条件下，两者独立。
+
+\item[c.]
+随机变量$x_1$和$x_5$之间存在路径$(x_1, x_3, x_2, x_5)$和$(x_1, x_3, x_6, x_5)$。由于$x_3$和$x_6$为head-to-head节点，$x_2$为tail-to-tail节点。故$x_1$和$x_5$不独立。若要$x_1$和$x_5$独立，则须满足如下条件之一：
+\begin{itemize}
+\item $x_3$或其后代节点不在观测的集合C中
+\item $x_6$或其后代节点不在观测的集合C中
+\item $x_2$在已观测的集合C中
+\end{itemize}
+\item[d.]
+根据c.中的分析知，给定$x_3$的后代节点$x_4$的条件下，$x_1$和$x_5$独立。
+
+\end{itemize}
+
+\subsubsection*{第二题}
+\begin{itemize}
+\item[1] 最大团为AB和BC
+\item[2] 联合概率分布函数
+
+记A，B，C中的随机变量为$x_A, x_B, x_C$。
+
+$p(A, B, C) = \frac{1}{Z}\psi_{AB}(x_A, x_B)\psi_{BC}(x_B, x_C)$
+\item[3] 证明
+
+\begin{equation*}
+\begin{split}
+p(A,C|B) &= \frac{p(A, B, C)}{p(B)} = \frac{p(A, B, C)}{\sum_{x'_{A}}\sum_{x'_{C}}\frac{1}{Z}\psi_{AB}(x'_{A}, x_B)\psi_{BC}(x_B, x'_{C})}\\
+&=\frac{\frac{1}{Z}\psi_{AB}(x_A, x_B)\psi_{BC}(x_B, x_C)}{\sum_{x'_{A}}\sum_{x'_{C}}\frac{1}{Z}\psi_{AB}(x'_{A}, x_B)\psi_{BC}(x_B, x'_{C})}\\
+&=\frac{\psi_{AB}(x_A, x_B)}{\sum_{x'_{A}}\psi_{AB}(x'_{A}, x_B)}\frac{\psi_{BC}(x_B, x_C)}{\sum_{x'_{C}}\psi_{BC}(x_B, x'_{C}) }
+\end{split}
+\end{equation*}
+
+\begin{equation*}
+\begin{split}
+p(A|B)&=\frac{p(A,B)}{p(B)}=\frac{\sum_{x'_C}p(x_A, x_B, x'_C)}{\sum_{x'_A}\sum_{x'_C}p(x'_A, x_B,x'_C)}\\
+&=\frac{\sum_{x'_C}\frac{1}{Z}\psi_{AB}(x_A, x_B)\psi_{BC}(x_B, x'_C)}{\sum_{x'_A}\sum_{x'_C}\frac{1}{Z}\psi_{AB}(x'_A, x_B)\psi_{BC}(x_B, x'_C)}\\
+&=\frac{\psi_{AB}(x_A, x_B)\sum_{x'_C}\psi_{BC}(x_B, x'_C)}{\sum_{x'_A}\psi_{AB}(x'_A, x_B)\sum_{x'_C}\psi_{BC}(x_B, x'_C)}\\
+&=\frac{\psi_{AB}(x_A, x_B)}{\sum_{x'_A}\psi_{AB}(x'_A, x_B)}
+\end{split}	
+\end{equation*}
+同理可得：
+$p(C|B)=\frac{\psi_{BC}(x_B, x_C)}{\sum_{x'_C}\psi_{BC}(x_B, x'_C)}$
+
+故有$p(A,C|B)=p(A|B)p(C|B)$
+\end{itemize}
+
+\end{document}

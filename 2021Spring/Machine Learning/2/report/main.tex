@@ -93,5 +93,11 @@ def backPropagate(self,targets,lr):
 	error = 0.0
 	error += 0.5 * (targets[k] - self.ao[k]) ** 2
 	return error
-\end{minted}    
+\end{minted}
+\section*{解答} % (fold)
+\label{sec:解答}
+	源代码见code/nn.py。
+
+	说明：由于觉得对数据单个单个进行操作有些麻烦，本次作业本人未使用本次作业提供的参考代码，采用矩阵化的操作实现了BP神经网络。但是由于精力、时间有限，这个神经网络有诸多不完善之处，首先是，代价函数的值在未达到局部最优前就会抖动，通过修改较小的学习率也无济于事，只好在运行过程中修改学习率，但是仍然会造成抖动；其次是，本神经网络的精度不高，测试集准确率最高仅能达到86\%左右。
+% section 解答 (end)
 \end{document}
